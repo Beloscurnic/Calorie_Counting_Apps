@@ -13,7 +13,7 @@ using WebAPI.Models;
 
 namespace WebAPI.Controllers
 {
-    [ApiVersion("1")]
+    
     [Produces("application/json")]
     [Route("api/{version:apiVersion}/[controller]")]
     public class ValuesController : BaseController
@@ -31,6 +31,7 @@ namespace WebAPI.Controllers
         /// <returns>Returns List_Domain</returns>
         /// <response code="200">Success</response>
         /// <response code="401">User не авторизован</response>
+        [Authorize]
         [HttpGet("GetAll")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

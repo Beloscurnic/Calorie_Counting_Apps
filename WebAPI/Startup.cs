@@ -9,9 +9,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Persistence;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
+using System.Text;
 using WebAPI.Middleware;
 
 namespace WebAPI
@@ -40,21 +42,28 @@ namespace WebAPI
             //.RequireAuthenticatedUser()
             //.RequireClaim("scope", "Role")
             //.Build();
-           
-            services.AddAuthentication(config =>
+
+            // Adding Authentication  
+            services.AddAuthentication(options =>
             {
-               
-                config.DefaultAuthenticateScheme =
-                    JwtBearerDefaults.AuthenticationScheme;
-                config.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-              
-               .AddJwtBearer("Bearer", options =>
-               {
-               
-                   options.Audience = "Calorie_Counting_API";
-                   options.RequireHttpsMetadata = false;
-               });
+            // Adding Jwt Bearer  
+            .AddJwtBearer(options =>
+            {
+                options.SaveToken = true;
+                options.RequireHttpsMetadata = false;
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidAudience = Configuration["JWT:ValidAudience"],
+                    ValidIssuer = Configuration["JWT:ValidIssuer"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))
+                };
+            });
 
             services.AddVersionedApiExplorer(options =>
                  options.GroupNameFormat = "'v'VVV");
