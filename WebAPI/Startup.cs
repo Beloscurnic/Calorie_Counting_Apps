@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Hosting; 
 using Microsoft.Extensions.Options;
 using Persistence;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -30,6 +30,11 @@ namespace WebAPI
                 config.AddProfile(new AssemblyMappingProfile(Assembly.GetExecutingAssembly()));
                 config.AddProfile(new AssemblyMappingProfile(typeof(I_DbContext).Assembly));
             });
+
+            //services.AddDbContext<CalorieTrackerContext>(options =>
+            //    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+
             // services.AddMvc();
             //services.AddMediatR(typeof(Startup));
             services.AddApplication();
