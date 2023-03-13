@@ -11,6 +11,7 @@ namespace Application.Interfaces
     public interface I_DbContext
     {
         DbSet<Domain_Example> Domain_Examples { get; set; }
+        DbSet<CalorieIntake> CalorieIntakes { get; set; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
 }
