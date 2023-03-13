@@ -1,9 +1,11 @@
-﻿using Domain;
+﻿using Application.Interfaces;
+using Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
@@ -11,11 +13,11 @@ namespace WebAPI.Controllers
     [ApiVersion("1")]
     [Produces("application/json")]
     [Route("api/{version:apiVersion}/[controller]")]
-    public class CalorieIntakeController : ControllerBase
+    public class CalorieIntakeController : BaseController
     {
-        private readonly CalorieTrackerContext _context;
+        private readonly Apps_DbContext _context;
 
-        public CalorieIntakeController(CalorieTrackerContext context)
+        public CalorieIntakeController(Apps_DbContext context)
         {
             _context = context;
         }
@@ -42,8 +44,8 @@ namespace WebAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<CalorieIntake>> PostCalorieIntake(CalorieIntake calorieIntake)
         {
-            _context.CalorieIntakes.Add(calorieIntake);
-            await _context.SaveChangesAsync();
+            await _context.CalorieIntakes.AddAsync(calorieIntake);
+            await _context.SaveChangesAsync(CancellationToken.None);
 
             return CreatedAtAction(nameof(GetCalorieIntake), new { id = calorieIntake.Id }, calorieIntake);
         }
