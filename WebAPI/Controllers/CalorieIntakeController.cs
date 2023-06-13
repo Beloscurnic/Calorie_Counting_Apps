@@ -115,8 +115,7 @@ namespace WebAPI.Controllers
 
             //return CreatedAtAction(nameof(GetCalorieIntakes), new { id = calorieIntake.Id }, calorieIntake);
 
-
-            var command = new CreateCalorieIntake.Command(foodProduct, weight);
+            var command = new CreateCalorieIntake.Command(foodProduct, weight, UserId);
             var calorieIntake = await _mediator.Send(command);
             return CreatedAtAction(nameof(GetCalorieIntakes), new { id = calorieIntake.Id }, calorieIntake);
 

@@ -21,7 +21,7 @@ namespace Application.Requests.Commands.CreateCalorieIntake
                 {
                     return null;
                 }
-                var calorieIntake = new CalorieIntake(selectedProduct, request.Weight);
+                var calorieIntake = new CalorieIntake(selectedProduct, request.Weight, request.UserId);
                 await _context.CalorieIntakes.AddAsync(calorieIntake);
                 await _context.SaveChangesAsync(CancellationToken.None);
 

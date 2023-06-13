@@ -14,7 +14,9 @@ namespace Persistence
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfiguration(new Domain_Example_Configuration());
+            builder.ApplyConfiguration(new CalorieIntakeConfiguration());
             base.OnModelCreating(builder);
+
         }
 
 
