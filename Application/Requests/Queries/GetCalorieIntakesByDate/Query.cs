@@ -2,9 +2,6 @@
 using MediatR;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Requests.Queries.GetCalorieIntakesByDate
 {
@@ -14,11 +11,13 @@ namespace Application.Requests.Queries.GetCalorieIntakesByDate
         {
             public DateTime Start { get; }
             public DateTime Stop { get; }
+            public Guid UserId { get; set; } 
 
-            public Query(DateTime start, DateTime stop)
+            public Query(DateTime start, DateTime stop, Guid userId)
             {
                 Start = start;
                 Stop = stop;
+                UserId = userId;
             }
         }
     }

@@ -1,24 +1,19 @@
-﻿using Domain;
+﻿using Application.Requests.Commands.CreateCalorieIntake;
+using Application.Requests.Commands.DeleteCalorieIntake;
+using Application.Requests.Commands.UpdateCalorieIntake;
+using Application.Requests.Queries.GetCalorieIntake;
+using Application.Requests.Queries.GetCalorieIntakes;
+using Application.Requests.Queries.GetCalorieIntakesByDate;
+using Application.Requests.Queries.GetValues;
+using Application.Requests.Queries.GetValuesForProduct;
+using Domain;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Persistence;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
-using Application.Requests.Queries;
-using Application.Requests.Commands;
-using Application.Requests.Queries.GetValues;
-using Application.Requests.Queries.GetValuesForProduct;
-using Application.Requests.Queries.GetCalorieIntakes;
-using Application.Requests.Queries.GetCalorieIntake;
-using Application.Requests.Queries.GetCalorieIntakesByDate;
-using Application.Requests.Commands.CreateCalorieIntake;
-using Application.Requests.Commands.UpdateCalorieIntake;
-using Application.Requests.Commands.DeleteCalorieIntake;
 
 namespace WebAPI.Controllers
 {
@@ -58,7 +53,7 @@ namespace WebAPI.Controllers
             //var result = await _context.CalorieIntakes.ToListAsync();
             //return Ok(result);
             
-            var query = new GetCalorieIntakes.Query();
+            var query = new GetCalorieIntakes.Query(UserId);
             var calorieIntakes = await _mediator.Send(query);
             return Ok(calorieIntakes);
             
@@ -76,7 +71,7 @@ namespace WebAPI.Controllers
 
             //return calorieIntake;
 
-            var query = new GetCalorieIntake.Query(id);
+            var query = new GetCalorieIntake.Query(id, UserId);
             var calorieIntake = await _mediator.Send(query);
             return calorieIntake;
 
@@ -96,7 +91,7 @@ namespace WebAPI.Controllers
             //}
             //return calorieIntakes;
 
-            var query = new GetCalorieIntakesByDate.Query(start, stop);
+            var query = new GetCalorieIntakesByDate.Query(start, stop, UserId);
             var calorieIntakes = await _mediator.Send(query);
             return calorieIntakes;
         }

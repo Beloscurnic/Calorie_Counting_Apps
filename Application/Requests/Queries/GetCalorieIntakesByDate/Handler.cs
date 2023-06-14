@@ -22,7 +22,7 @@ namespace Application.Requests.Queries.GetCalorieIntakesByDate
             public async Task<List<CalorieIntake>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var calorieIntakes = await _context.CalorieIntakes
-                    .Where(x => x.Date >= request.Start && x.Date <= request.Stop)
+                    .Where(x => x.Date >= request.Start && x.Date <= request.Stop && x.UserId == request.UserId)
                     .ToListAsync();
 
                 if (calorieIntakes.Count == 0)

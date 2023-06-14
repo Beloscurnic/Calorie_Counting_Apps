@@ -2,10 +2,8 @@
 using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -24,7 +22,7 @@ namespace Application.Requests.Queries.GetCalorieIntakes
 
             public async Task<IEnumerable<CalorieIntake>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var result = await _context.CalorieIntakes.ToListAsync();
+                var result = await _context.CalorieIntakes.Where(x =>x.UserId == request.UserId).ToListAsync();
                 return result;
             }
         }
