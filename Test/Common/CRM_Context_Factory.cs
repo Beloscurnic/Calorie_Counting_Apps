@@ -11,8 +11,7 @@ namespace Test.Common
 {
  public class CRM_Context_Factory
     {
-        public static Guid Id_1 = Guid.NewGuid();
-        public static Guid Id_2 = Guid.NewGuid();
+
 
 
         public static Apps_DbContext Create()
@@ -25,13 +24,11 @@ namespace Test.Common
             context.Domain_Examples.AddRange(
                 new Domain_Example
                 {
-                    Id = Id_1,
                     Name ="Dan",
                     Email="email@mail.ru"
                 },
                 new Domain_Example
                 {
-                    Id = Id_2,
                     Name = "Dan2",
                     Email = "email@mail.ru"
                 }

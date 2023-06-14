@@ -1,5 +1,6 @@
 ﻿using Application.Requests.Commands.Creat_Exemple;
 using Application.Requests.Queries.List_Domain_Example;
+using Application.Requests.Queries.Test_get;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -31,7 +32,6 @@ namespace WebAPI.Controllers
         /// <returns>Returns List_Domain</returns>
         /// <response code="200">Success</response>
         /// <response code="401">User не авторизован</response>
-        [Authorize]
         [HttpGet("GetAll")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -45,9 +45,21 @@ namespace WebAPI.Controllers
             return Ok(vm);
         }
 
+        [HttpGet("Test")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<ActionResult<Test_get.List_View_Model_Test>> Test()
+        {
+            var query = new Test_get.Query
+            {
+
+            };
+            var vm = await Mediator.Send(query);
+            return Ok(vm);
+        }
 
         [HttpPost("create")]
-     
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<Guid>> Create([FromBody] Creat_Domain_ExampleDTO create_ProviderDto)

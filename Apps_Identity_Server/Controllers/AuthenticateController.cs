@@ -70,6 +70,8 @@ namespace Apps_Identity_Server.Controllers
             return Unauthorized();
         }
 
+        
+
         [HttpPost]
         [Route("Register")]
         public async Task<IActionResult> Register([FromBody] RegisterModel model)

@@ -1,3 +1,4 @@
+using Apps_Identity_Server.Controllers;
 using Apps_Identity_Server.Data;
 using Apps_Identity_Server.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -69,6 +70,9 @@ namespace Apps_Identity_Server
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))
                 };
             });
+
+            services.AddScoped<RefreshTokenController>();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Apps_Identity_Server", Version = "v1" });

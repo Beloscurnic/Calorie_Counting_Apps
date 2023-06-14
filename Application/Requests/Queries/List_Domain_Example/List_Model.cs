@@ -13,7 +13,7 @@ namespace Application.Requests.Queries.List_Domain_Example
     {
        public class List_Model: IMap_With<Domain_Example>
         {
-            public Guid Id { get; set; }
+            public int Id { get; set; }
             public string Name { get; set; }
             public string Email { get; set; }
 
