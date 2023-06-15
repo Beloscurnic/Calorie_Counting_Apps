@@ -9,6 +9,8 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net.Mail;
+using System.Net;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -89,6 +91,8 @@ namespace Apps_Identity_Server.Controllers
             if (!result.Succeeded)
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User creation failed! Please check user details and try again." });
 
+            await SendMsg(user.Email, user.Name);
+
             return Ok(new Response { Status = "Success", Message = "User created successfully!" });
         }
 
@@ -121,6 +125,19 @@ namespace Apps_Identity_Server.Controllers
             }
 
             return Ok(new Response { Status = "Success", Message = "User created successfully!" });
+        }
+
+        private async Task SendMsg(string recipient, string name)
+        {
+            MailAddress from = new MailAddress("heterszeus@gmail.com", "CalorieAccountServer");
+            MailAddress to = new MailAddress(recipient);
+            MailMessage m = new MailMessage(from, to);
+            m.Subject = "Register";
+            m.Body = name + " account was created successfully";
+            SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
+            smtp.Credentials = new NetworkCredential("heterszeus@gmail.com", "krnbolwzzmsdpffv");
+            smtp.EnableSsl = true;
+            await smtp.SendMailAsync(m);
         }
     }
 }
