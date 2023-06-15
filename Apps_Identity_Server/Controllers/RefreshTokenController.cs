@@ -18,6 +18,7 @@ namespace Apps_Identity_Server.Controllers
     [Route("api/[controller]")]
     public class RefreshTokenController : ControllerBase
     {
+        private static List<string> RevokedTokens = new List<string>();
         private readonly IConfiguration _configuration;
         private readonly UserManager<ApplicationUser> userManager;
         public RefreshTokenController(IConfiguration configuration, UserManager<ApplicationUser> userManager)
@@ -64,6 +65,7 @@ namespace Apps_Identity_Server.Controllers
 
             return BadRequest("Invalid refresh token");
         }
+
 
         private async Task<string> ValidateRefreshToken(string token)
         {

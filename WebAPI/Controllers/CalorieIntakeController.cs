@@ -19,6 +19,8 @@ using Application.Requests.Queries.GetCalorieIntakesByDate;
 using Application.Requests.Commands.CreateCalorieIntake;
 using Application.Requests.Commands.UpdateCalorieIntake;
 using Application.Requests.Commands.DeleteCalorieIntake;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Configuration;
 
 namespace WebAPI.Controllers
 {
@@ -27,14 +29,35 @@ namespace WebAPI.Controllers
     [Route("api/{version:apiVersion}/[controller]")]
     public class CalorieIntakeController : BaseController
     {
+       // public static List<string> RevokedTokens = new List<string>();
         private readonly Apps_DbContext _context;
         private readonly IMediator _mediator;
-
-        public CalorieIntakeController(Apps_DbContext context, IMediator mediator)
+        private readonly List<string> _revokedTokens;
+        public CalorieIntakeController(IMediator mediator, List<string> revokedTokens)
         {
-            _context = context;
+
             _mediator = mediator;
+            _revokedTokens = revokedTokens;
         }
+
+        [HttpPost("logout")]
+        [Authorize]
+        public IActionResult Logout()
+        {
+            // Получение текущего токена
+            var token = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+
+            if (_revokedTokens.Contains(token))
+            {
+                return BadRequest("Token has already been revoked");
+            }
+
+            // Добавление токена в список отозванных
+            _revokedTokens.Add(token);
+
+            return Ok("Logout successful");
+        }
+
 
         [HttpGet("Values")]
         public async Task<ActionResult<IEnumerable<CalorieIntake>>> GetValuesAsync()

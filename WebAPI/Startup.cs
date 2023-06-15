@@ -12,14 +12,18 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Persistence;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Text;
+using WebAPI.Controllers;
 using WebAPI.Middleware;
 
 namespace WebAPI
 {
     public class Startup
     {
+        private static List<string> RevokedTokens = new List<string>();
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public IConfiguration Configuration { get; }
@@ -27,6 +31,7 @@ namespace WebAPI
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton(RevokedTokens);
             services.AddAutoMapper(config =>
             {
                 config.AddProfile(new AssemblyMappingProfile(Assembly.GetExecutingAssembly()));
@@ -66,7 +71,17 @@ namespace WebAPI
                     ValidateAudience = true,
                     ValidAudience = Configuration["JWT:ValidAudience"],
                     ValidIssuer = Configuration["JWT:ValidIssuer"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"])),
+
+                    ValidateLifetime = true,
+                    LifetimeValidator = (notBefore, expires, token, parameters) =>
+                    {
+                        if (RevokedTokens.Contains(token.ToString()))
+                        {
+                            return false;
+                        }
+                        return true;
+                    }
                 };
             });
 
