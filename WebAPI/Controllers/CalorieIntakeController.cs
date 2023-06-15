@@ -28,9 +28,7 @@ namespace WebAPI.Controllers
     [Produces("application/json")]
     [Route("api/{version:apiVersion}/[controller]")]
     public class CalorieIntakeController : BaseController
-    {
-       // public static List<string> RevokedTokens = new List<string>();
-        private readonly Apps_DbContext _context;
+    {      
         private readonly IMediator _mediator;
         private readonly List<string> _revokedTokens;
         public CalorieIntakeController(IMediator mediator, List<string> revokedTokens)
@@ -196,11 +194,6 @@ namespace WebAPI.Controllers
             await _mediator.Send(command);
             return NoContent();
 
-        }
-
-        private bool CalorieIntakeExists(Guid id)
-        {
-            return _context.CalorieIntakes.Any(e => e.Id == id);
         }
     }
 }

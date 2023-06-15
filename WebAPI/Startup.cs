@@ -18,6 +18,7 @@ using System.Reflection;
 using System.Text;
 using WebAPI.Controllers;
 using WebAPI.Middleware;
+using WebAPI.Services;
 
 namespace WebAPI
 {
@@ -32,6 +33,9 @@ namespace WebAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton(RevokedTokens);
+           
+            services.AddHostedService<TokenRevocationBackgroundService>();
+
             services.AddAutoMapper(config =>
             {
                 config.AddProfile(new AssemblyMappingProfile(Assembly.GetExecutingAssembly()));
@@ -132,6 +136,7 @@ namespace WebAPI
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseApiVersioning();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
