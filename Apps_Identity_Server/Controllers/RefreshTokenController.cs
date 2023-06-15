@@ -72,18 +72,21 @@ namespace Apps_Identity_Server.Controllers
             {
                 return null;
             }
+          
             try
             {
                 // 2. Расшифруйте Refresh Token и получите его содержимое ClaimTypes.Name, user.UserName
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var jwtToken = tokenHandler.ReadToken(token) as JwtSecurityToken;
-                var nameUser = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
 
+                var expirationTime = jwtToken.ValidTo;
+                var currentTime = DateTime.UtcNow;
                 var now = DateTime.UtcNow;
                 if (jwtToken.ValidTo < now)
                 {
                     return null;
                 }
+                var nameUser = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
 
                 return nameUser;
             }
